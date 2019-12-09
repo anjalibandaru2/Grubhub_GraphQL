@@ -1,6 +1,7 @@
 import React,{Component} from "react";
 import {getOwnerID} from "./genericapis.js";
 import axios from 'axios';
+import {addItemToSection} from '../../mutations/signupLoginProfileMutations';
 const settings = require("../config/settings.js");
 
 export class ModalDialog extends Component{
@@ -29,7 +30,7 @@ export class ModalDialog extends Component{
         })
     }
     renderModalBody(){
-        if(this.props.modalType === "add" || this.props.modalType === "update"){
+     
             return(
                 <form id={this.props.id} onSubmit={this.submitClickHandler} encType="multipart/form-data">
                     <div className="form-group">
@@ -41,10 +42,6 @@ export class ModalDialog extends Component{
                     <div className="form-group">
                         <input type="number" required className="form-control" placeholder="Item Price" value={this.props.item_price} name="item_price" onChange={this.handleInputChange}/>
                     </div>
-                    <div className="form-group">
-                        <input type='file' id='itemImage' name="item_image" accept="image/x-png,image/gif,image/jpeg"/>
-                    </div>
-                    <p>Item image upload</p>
                     
                     <div className="modal-footer">
                     <button type="submit" className="btn btn-success">Submit</button>
@@ -52,11 +49,6 @@ export class ModalDialog extends Component{
                 </div>
                 </form>
             )
-        } else{
-            return(
-                <h5>Are you sure want to delte this item?</h5>
-            )
-        }
     }
     submitClickHandler=async(evt)=>{
         axios.defaults.withCredentials = true;
@@ -65,46 +57,13 @@ export class ModalDialog extends Component{
         let owner_id = getOwnerID();
         let form_data = new FormData();
         form_data.set('owner_id', owner_id);
-        //ADD LATER
-        form_data.append('item_image', evt.target.elements["item_image"].files[0]);
         form_data.set('item_name',item_name);
         form_data.set("item_description", item_description);
         form_data.set('item_price',item_price);
         form_data.set("section_type", section_type);
-        this.props.addItemToSection(form_data);
+        // this.props.addItemToSection(form_data);
+        this.props.mutate({variables:data});
         window.$("#"+this.state.modalId).modal('hide');
-        //this.props.modalSubmitHandler( form_data);
-       // this.props.modalSubmitHandler( {item_name, item_description, item_price, section_type});
-       /*let addData = {};
-       let postURL = "http://"+settings.hostname+":"+settings.port+"/addItemtoSection";
-       await axios({
-        method: 'post',
-        url: postURL,
-        // data: {"jsonData" : JSON.stringify(data)},        
-        data : form_data,
-        headers: {'Content-Type': 'multipart/form-data'} 
-        }).then((response) => {
-            if (response.status >= 500) {
-                throw new Error("Bad response from server");
-            }
-            return response.data;
-        })
-        .then((responseData) => {
-            //swal(responseData.responseMessage + " Try logging in.");
-            console.log(responseData);
-            if(responseData.status){
-                
-                addData = responseData.itemDetails;
-                alert("item added successfully!!");
-                window.location.reload();
-            }
-        }).catch(function (err) {
-            console.log(err);
-            alert("Please fill proper details! item not added !!");
-        });
-       // this.props.modalSubmitHandler(addData, section_type);
-        window.$("#"+this.state.modalId).modal('hide');*/
-
     }
     render(){
         var modalId = this.props.id;
@@ -122,7 +81,6 @@ export class ModalDialog extends Component{
                     <button type="button" className="close" data-dismiss="modal">&times;</button>
                 </div>
                 <div className="modal-body">
-                    Modal body..
                     {this.renderModalBody()}
                 </div>
                 
@@ -135,4 +93,5 @@ export class ModalDialog extends Component{
            
 }
 
+ModalDialog = graphql (addSection) (ModalDialog)
 export default ModalDialog;

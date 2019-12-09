@@ -68,40 +68,86 @@ mutation signin(
         isValidUser,
         user_type,
         name,
-        id
+        id,
+        responseMessage
     }
 }
 `;
 
-const updateprofilemutation = gql`
-mutation updateProfile(
-        $id:String!,
-        $firstname:String!,
-        $lastname:String!,
-        $phoneNumber:String!,
-        $aboutMe:String!, 
-        $company: String!,
-        $city: String!,
-        $country: String!,
-        $school: String!,
-        $hometown: String!,
-        $languages: String!,
-        $gender: String!
+const updateBuyerProfileMutation = gql`
+mutation updateBuyerProfile(
+        $buyer_id:String!,
+        $buyer_name:String!,
+        $buyer_email:String!,
+        $buyer_address :String!
   )
   {
-    updateProfile(
-        id: $id,
-        firstname: $firstname,
-        lastname: $lastname,
-        phoneNumber: $phoneNumber,
-        aboutMe: $aboutMe, 
-        company: $company,
-        city: $city,
-        country: $country,
-        school: $school,
-        hometown: $hometown,
-        languages: $languages,
-        gender: $gender
+    updateBuyerProfile(
+        buyer_id: $buyer_id,
+        buyer_name: $buyer_name,
+        buyer_email: $buyer_email,
+        buyer_address : $buyer_address
+
+        ){
+            responseMessage
+        }
+    }
+`;
+
+const updateOwnerProfileMutation = gql`
+mutation updateOwnerProfile(
+        $owner_id:String!,
+        $owner_name:String!,
+        $owner_email:String!,
+        $owner_restName:String!,
+        $owner_restCuisine:String!,
+        $owner_restZipcode:String!
+  )
+  {
+    updateOwnerProfile(
+        owner_id: $owner_id,
+        owner_name: $owner_name,
+        owner_email: $owner_email,
+        owner_restName:$owner_restName,
+        owner_restCuisine: $owner_restCuisine,
+        owner_restZipcode:$owner_restZipcode
+
+        ){
+            responseMessage
+        }
+    }
+`;
+
+const addSection = gql`
+mutation addSection(
+        $owner_id:String!,
+        $section_type:String!,
+  )
+  {
+    addSection(
+        owner_id: $owner_id,
+        section_type: $section_type
+        ){
+            responseMessage
+        }
+    }
+`;
+
+const addItemToSection = gql`
+mutation addItemToSection(
+        $owner_id:String!,
+        $section_type:String!,
+        $item_name:String!,
+        $item_description:String!,
+        $item_price:String!
+  )
+  {
+    addItemToSection(
+        owner_id: $owner_id,
+        section_type: $section_type,
+        item_name : $item_name,
+        item_description : $item_description,
+        item_price : $item_price
         ){
             responseMessage
         }
@@ -109,4 +155,6 @@ mutation updateProfile(
 `;
 
 
-export { signupBuyermutation, signupOwnermutation, updateprofilemutation, signInMutation };
+
+
+export { signupBuyermutation, signupOwnermutation, updateBuyerProfileMutation, signInMutation, updateOwnerProfileMutation, addSection, addItemToSection, getMenuItems };

@@ -1,7 +1,7 @@
 import React,{Component} from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Container, Row, Col, Card} from 'react-bootstrap';
-//import axios from 'axios';
+import  swal from 'sweetalert';
 import cookie from 'react-cookies';
 import {Redirect}  from 'react-router';
 import {RedirectToOwnerHome, RedirectToBuyerHome, getUserType, redirectToUserHome} from "./genericapis.js";
@@ -13,7 +13,8 @@ import {isFieldEmpty} from "./genericapis";
 class SignIn extends Component{
     state={
         message : "",
-        submitHandler : ""
+        submitHandler : "",
+        redirect : "false"
     }
     constructor(props){
         super(props);
@@ -26,18 +27,22 @@ class SignIn extends Component{
         var formData = new FormData(evt.target);
         let data = { "email": formData.get('email'), "password": formData.get('password'), "userType" : formData.get('userType')};
         this.props.mutate({variables: data }).then(res => {
-            console.log(res);
-                
-            if(!res.data.login.isValidUser){
-                this.setState({ displayErrorMessage: true});
+            debugger;
+            console.log(res); 
+            if(!res.data.signin.isValidUser){
+                swal(res.data.signin.responseMessage);
+               // this.setState({ displayErrorMessage: true});
             }
             else{
-                localStorage.setItem("user_type", res.data.login["user_type"]);
-                localStorage.setItem("name", res.data.login.name);
-                localStorage.setItem("id", res.data.login.id);
-                swal(res.data.login.responseMessage);
-            }
-            
+                
+                localStorage.setItem("user_type", res.data.signin["user_type"]);
+                localStorage.setItem("name", res.data.signin.name);
+                localStorage.setItem("id", res.data.signin.id);
+                swal(res.data.signin.responseMessage);
+                this.setState({
+                    redirect : "true"
+                });
+            } 
         })
         .catch(err => {
             console.log(err);
@@ -45,11 +50,6 @@ class SignIn extends Component{
     }
     render(){
         var redirectVar = "";
-        console.log("in login JSX...")
-        console.log(cookie.load('user_type'));
-        console.log(cookie.load('owner_id'));
-        console.log(cookie.load('buyer_id'));
-        console.log(cookie.load('name'));
         debugger;
         let userType = getUserType();
         if(userType == "owner"){
