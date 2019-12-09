@@ -14,6 +14,10 @@ BuyersSchema = new Schema({
   buyer_password: {
     type: String,
     default: ''
+  },
+  buyer_address : {
+    type: String,
+    default: '' 
   }
 });
     
