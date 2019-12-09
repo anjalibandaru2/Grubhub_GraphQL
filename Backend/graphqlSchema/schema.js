@@ -119,13 +119,6 @@ const menuItemsType  = new GraphQLObjectType({
     })
 });
 
-const FacultyCourseList = new GraphQLObjectType({
-    name: 'FacultyCourseList',
-    fields: () => ({
-        courses: { type: new GraphQLList(FacultyCourseType) }
-    })
-});
-
 
 const RootQuery = new GraphQLObjectType({
     name: 'RootQueryType',
