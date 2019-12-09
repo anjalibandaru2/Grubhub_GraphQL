@@ -1,13 +1,13 @@
 
 # Frontend
- ## install node modules :
+ ## Install node modules :
  npm install
- ## start Frontend instance
+ ## Start Frontend instance
 npm start
 
 # Backend
- ## install node modules 
+ ## Install node modules 
  npm install
  
- ## start Backend instance
+ ## Start Backend instance
 node index.js
